@@ -1,6 +1,6 @@
  <p align="center"> <img src="https://camo.githubusercontent.com/047366567218e6f144fb666cf9d0d1c2f34dc5a6e6af816aeead27d9f1e8350f/68747470733a2f2f73746f726167652e676f6f676c65617069732e636f6d2f676f6c64656e2d77696e642f626f6f7463616d702d6c61756e6368626173652f6c6f676f2e706e67"></p>
 
-  <h1 align="center">  LaunchStore  </h1>
+  <h1 align="center">  LaunchStore 2.0 (CADASTRO DE USUÁRIOS)  </h1>
 
   <p align="center">Projeto desenvolvido durante o bootcamp LaunchBase da <a href="https://www.rocketseat.com.br" target="_blank">Rocketseat</a>. </p>
 
