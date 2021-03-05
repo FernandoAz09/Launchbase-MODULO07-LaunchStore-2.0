@@ -1,37 +1,3 @@
-/*  
-TUDO SOBRE ---> https://tableless.com.br/o-basico-sobre-expressoes-regulares/]
-
-Regex quick reference
-[abc] 	A single character of: a, b, or c
-[^abc] 	Any single character except: a, b, or c
-[a-z] 	Any single character in the range a-z
-[a-zA-Z] 	Any single character in the range a-z or A-Z
-^ 	Start of line
-$ 	End of line
-\A 	Start of string
-\z 	End of string
-. 	Any single character
-\s 	Any whitespace character
-\S 	Any non-whitespace character
-\d 	Any digit
-\D 	Any non-digit
-\w 	Any word character (letter, number, underscore)
-\W 	Any non-word character
-\b 	Any word boundary
-(...) 	Capture everything enclosed
-(a|b) 	a or b
-a? 	Zero or one of a
-a* 	Zero or more of a
-a+ 	One or more of a
-a{3} 	Exactly 3 of a
-a{3,} 	3 or more of a
-a{3,6} 	Between 3 and 6 of a
-
-options: i case insensitive m make dot match newlines x ignore whitespace in regex o perform #{...} substitutions only once
-
-*/
-//ALTERANDO O FORMATO DOS NÚMEROS PARA MOEDA(BRL) E IMPEDINDO OUTROS CARACTERES(ALFABÉTICOS E ESPECIAIS)
-
 // MASK SENDO IMPORTADO PARA O HTML DE FORMA DINÂMICA 
 
 const Mask = {
@@ -46,6 +12,109 @@ const Mask = {
         style:'currency',
         currency:'BRL'
         }).format(value/100)
+    },
+    cpfCnpj(value) {
+        value = value.replace(/\D/g,"") 
+
+        if (value.length > 14) value = value.slice(0, -1)
+        // CNPJ - 11.222.333/0001-11
+        if (value.length > 11) {
+            value = value.replace(/(\d{2})(\d)/, "$1.$2")
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")
+            value = value.replace(/(\d{3})(\d)/, "$1/$2")
+            value = value.replace(/(\d{4})(\d)/, "$1-$2")
+
+
+        }else {
+        //CPF - 111.222.333-44
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")
+            value = value.replace(/(\d{3})(\d)/, "$1.$2")
+            value = value.replace(/(\d{3})(\d)/, "$1-$2")
+
+
+        }
+
+        return value
+    }, 
+    cep(value) {
+        value = value.replace(/\D/g, "")
+
+        if (value.length > 8) {
+            value = value.slice(0, -1)
+        }
+
+        value = value.replace(/(\d{5})(\d)/, "$1-$2")
+
+        return value
+
+    }
+}
+
+//VALIDAÇÃO DOS CAMPOS DO REGISTER
+
+const Validate = {
+    apply(input, func) {
+        Validate.clearErrors(input)
+
+        let results = Validate[func](input.value)
+        input.value = results.value
+
+        if (results.error)
+            Validate.displayError(input, results.error)
+    },
+    displayError(input, error) {
+        const div = document.createElement('div')
+        div.classList.add('error')
+        div.innerHTML = error
+        input.parentNode.appendChild(div)
+        input.focus()
+
+    },
+    clearErrors(input) {
+        const errorDiv = input.parentNode.querySelector(".error")
+
+        if(errorDiv) errorDiv.remove()
+    },
+    isEmail(value) {
+        let error = null
+
+        const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+        if (!value.match(mailFormat)) error = "Email inválido"
+        return {
+            error,
+            value
+        }
+
+    },
+    isCpfCnpj(value) {
+        let error = null
+
+        const cleanValues = value.replace(/\D/g, "")
+
+        if (cleanValues.length > 11 && cleanValues.length !== 14) {
+            error = "CNPJ incorreto"
+        } else if (cleanValues.length < 12 && cleanValues.length !== 11) {
+            error = "CPF incorreto"
+        }
+        return {
+            error,
+            value
+        }
+    },
+    isCep(value) {
+        let error = null
+
+        const cleanValues = value.replace(/\D/g, "")
+
+        if (cleanValues.length !== 8) {
+            error = "CEP incorreto"
+        } 
+        return {
+            error,
+            value
+        }
+        
     }
 }
 
