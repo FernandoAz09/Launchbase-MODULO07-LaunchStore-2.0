@@ -1,4 +1,4 @@
-const db = require('../config/db')
+const db = require('../../config/db')
 const { hash } = require('bcryptjs')
 
 module.exports = {
@@ -47,6 +47,7 @@ module.exports = {
 
             const results = await db.query(query, values)
             return results.row[0].id
+            
         }catch(err) {
             console.error(err)
         }
